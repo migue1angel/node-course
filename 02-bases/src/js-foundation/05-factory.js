@@ -1,16 +1,16 @@
-const {v4: uuidv4} = require('uuid');
-const obj = {name: 'Jhon', birthdate: '2003-06-03'};
-const getAge = require ('get-age')
 
-const buildPerson = ({name, birthdate}) => {
+const buildMakePerson = ({getUUID, getAge}) => {
 
-    return user = {
-        id : uuidv4(),
-        name,
-        birthdate,
-        age : getAge(birthdate)
+    return ({ name, birthdate }) => {
+        return {
+            id: getUUID(),
+            name,
+            birthdate,
+            age: getAge(birthdate),
+        }
     }
-
 }
 
-module.exports = { buildPerson}
+module.exports = { 
+    buildMakePerson,
+ }
