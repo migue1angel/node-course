@@ -1,11 +1,10 @@
 
+const axios = require('axios');
 
 const httpClient = {
 
     get: async (url) => {
-        const response = await fetch(url);
-        if(!response.ok) return null;
-        const data = await response.json();
+        const {data} = await axios.get(url);
         return data;   
     },
 
