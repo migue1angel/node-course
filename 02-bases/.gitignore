@@ -1,2 +1,11 @@
+# dependencies
 /node_modules
+
+#coverage directory
+/coverage
+
+#temporary files
 *.log
+
+#build output
+/dist

@@ -2,16 +2,16 @@
 // const {getPokemonById} = require('./js-foundation/06-promises')
 // const {buildLogger} = require('./plugins')
 
-import { getPokemonById } from "./js-foundation/06-promises";
+// import { getPokemonById } from "./js-foundation/06-promises";
 
 // import { buildLogger } from "./plugins/logger.plugin";
 // const logger = buildLogger('app.js')
 // logger.log('Hola mundo')
 // logger.error('Some error')
 
-getPokemonById(4)
-.then(res => console.log(res))
-.catch(err => console.log(err));
+// getPokemonById(4)
+// .then(res => console.log(res))
+// .catch(err => console.log(err));
 
 
 // const pokemonInfo = getPokemonById(4)
