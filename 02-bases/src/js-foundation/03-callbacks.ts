@@ -5,7 +5,7 @@ interface User {
 }
 
 const users : User[] = [
-    {id: 1, name: 'Miguel'},
+    {id: 1, name: 'Jhon Doe'},
     {id: 2, name: 'Carlos'},
     {id: 3, name: 'Esteban'},
     {id: 4, name: 'Federico'},
@@ -21,11 +21,7 @@ export function getUserById(id:number, callback:CallbackModel){
     })
 
     if(!user) {
-        setTimeout(()=>{
-        callback(`USER with id ${id} not found`);
-        },2500);
-        // return callback(`USER with id ${id} not found`);
-        return ;
+        return callback(`USER with id ${id} not found`);
     }
     
     return callback(undefined, user);
