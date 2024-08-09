@@ -1,10 +1,24 @@
-import { getPokemonById } from "../../src/js-foundation/06-promises"
+import { getPokemonById } from "../../src/js-foundation/06-promises";
 
 
 describe('06-promises/js-foundation', () => {
 
-    test('getPokemos by id should return a pokemon', async () => {
-        
+    test('getPokemonById should return a pokemon', async () =>{
+
+        const pokemonId = 1;
+        const pokemonName = await getPokemonById(pokemonId); 
+        expect(pokemonName).toBe('bulbasaur');
     })
 
+    test('getPokemonById should return an error if pokemon does not exist ', async () =>{
+
+        const pokemonId = 156461;
+
+        try {
+            await getPokemonById(pokemonId); 
+            expect( true ).toBeFalsy();
+        } catch (error) {
+            expect( error ).toBe(`Pokemon with id ${pokemonId} not found`);
+        }
+    })
 })
