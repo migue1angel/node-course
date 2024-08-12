@@ -1,10 +1,10 @@
 
 
-import winston, {format} from 'winston';
+import winston, {format, level} from 'winston';
 
 const {combine,timestamp, json}= winston.format;
 
-const logger = winston.createLogger({
+export const logger = winston.createLogger({
     level: 'info',
     format:combine(
         timestamp(),
@@ -40,7 +40,7 @@ export const buildLogger = (service:string) => {
             logger.log('info', { message, service });
         },
         error: (message: string) => {
-            logger.error('error', { message, service});
+            logger.error('error',{level:'error',message, service});
         }
  
     }
