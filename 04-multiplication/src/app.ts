@@ -1,20 +1,6 @@
-import fs from 'fs'
 
-const base: number = 5
-const header : string = `
-========================================
-            Tabla del  ${base}
-========================================
-` 
-let messageOutput = ''
+console.log(process.argv);
 
-for(let i=1; i<= 10; i++){
-    messageOutput += 
-    `           ${base} x ${i} = ${base*i}\n`
-}
-messageOutput = header + messageOutput
-console.log(messageOutput);
+const [__,_, ...args] = process.argv
 
-const outputPath: string = 'outputs' 
-fs.mkdirSync(outputPath, {recursive:true})
-fs.writeFileSync(`${outputPath}/tabla-${base}.txt`, messageOutput);
+console.log( args);
