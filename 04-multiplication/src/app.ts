@@ -1,6 +1,12 @@
+import { yarg } from "./config/plugin/args.plugin";
 
-console.log(process.argv);
+// console.log( process.argv);
 
-const [__,_, ...args] = process.argv
+// console.log(yarg.b);
 
-console.log( args);
+(async() => {
+    await main();
+})(); 
+
+async function main() {
+}
