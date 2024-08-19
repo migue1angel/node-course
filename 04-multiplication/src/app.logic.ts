@@ -10,10 +10,7 @@ const header : string = `
 ` 
 let messageOutput = ''
 
-for(let i=1; i<= limit; i++){
-    messageOutput += 
-    `           ${base} x ${i} = ${base*i}\n`
-}
+
 messageOutput = header + messageOutput
 if(showTable)console.log(messageOutput);
 
