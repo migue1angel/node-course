@@ -1,19 +1,26 @@
 import { CheckService } from "../domain/use-cases/checks/check-service";
+import { FileSystemDatasource } from "../infrastructure/datasources/file-system.datasource";
+import { LogRepositoryImpl } from "../infrastructure/respositories/log.repository.impl";
 import { CronService } from "./cron/cron-service";
 
-export class ServerApp {
-    static start() {
-        console.log("Server started...");
+const fileSystemLogRepository = new LogRepositoryImpl(
+  new FileSystemDatasource()
+);
 
-        CronService.createJob(
-            "*/5 * * * * *",
-            () => {
-                const url = 'https://google.com'
-                new CheckService(
-                    () => console.log(`${url} is ok`),
-                    (error) => { console.log(error) }
-                ).execute(url);
-            }
-        );
-    }
+export class ServerApp {
+  static start() {
+    console.log("Server started...");
+
+    CronService.createJob("*/5 * * * * *", () => {
+        const url = "https://google.com";
+    //   const url = "https://localhost:3000";
+      new CheckService(
+        fileSystemLogRepository,
+        () => console.log(`${url} is ok`),
+        (error) => {
+          console.log(error);
+        }
+      ).execute(url);
+    });
+  }
 }
