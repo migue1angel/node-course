@@ -16,10 +16,8 @@ export class ServerApp {
     //   const url = "https://localhost:3000";
       new CheckService(
         fileSystemLogRepository,
-        () => console.log(`${url} is ok`),
-        (error) => {
-          console.log(error);
-        }
+        undefined, // al ser métodos opcionales es nuestra elección enviar algo u omitirlo(undefined)
+        undefined,
       ).execute(url);
     });
   }
