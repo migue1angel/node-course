@@ -7,8 +7,8 @@ export enum LogSeverityLevel {
 export interface LogEntityOptions {
   level: LogSeverityLevel;
   message: string;
-  createdAt?: Date;
   origin: string;
+  createdAt?: Date;
 }
 
 export class LogEntity {
@@ -21,7 +21,7 @@ export class LogEntity {
     const { level, message, createdAt = new Date(), origin } = options;
     this.level = level;
     this.message = message;
-    this.createdAt = new Date();
+    this.createdAt = createdAt;
     this.origin = origin;
   }
 

@@ -1,5 +1,6 @@
 import { envs } from "../config/plugins/envs.plugin";
 import { CheckService } from "../domain/use-cases/checks/check-service";
+import { SendEmailLogs } from "../domain/use-cases/email/send-email-logs";
 import { FileSystemDatasource } from "../infrastructure/datasources/file-system.datasource";
 import { LogRepositoryImpl } from "../infrastructure/respositories/log.repository.impl";
 import { CronService } from "./cron/cron-service";
@@ -8,12 +9,16 @@ import { EmailService } from "./email/email.service";
 const fileSystemLogRepository = new LogRepositoryImpl(
   new FileSystemDatasource()
 );
+const emailService = new EmailService();
 
 export class ServerApp {
   static start() {
     console.log("Server started...");
-
-    // const emailService = new EmailService();
+    // new SendEmailLogs(
+    //   emailService,
+    //   fileSystemLogRepository
+    // )
+    // emailService.sendEmailWithFileSystemLogs(['maf.chimborazo@yavirac.edu.ec', 'macf06200@gmail.com']);
     // emailService.sendEmail({
     //   to:'maf.chimborazo@yavirac.edu.ec',
     //   subject:'Logs de sistema',
@@ -24,7 +29,7 @@ export class ServerApp {
 
     //   `
     // })
-    
+
     // CronService.createJob("*/5 * * * * *", () => {
     //     // const url = "https://google.com";
     //   const url = "https://localhost:3000";
