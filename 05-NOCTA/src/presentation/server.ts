@@ -14,6 +14,9 @@ const emailService = new EmailService();
 export class ServerApp {
   static start() {
     console.log("Server started...");
+    console.log(envs.MONGO_PASS);
+    console.log(envs.MONGO_USER);
+    
     // new SendEmailLogs(
     //   emailService,
     //   fileSystemLogRepository
