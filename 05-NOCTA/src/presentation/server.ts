@@ -1,22 +1,21 @@
-import { envs } from "../config/plugins/envs.plugin";
+import { LogSeverityLevel } from "../domain/entities/log.entity";
 import { CheckService } from "../domain/use-cases/checks/check-service";
 import { SendEmailLogs } from "../domain/use-cases/email/send-email-logs";
 import { FileSystemDatasource } from "../infrastructure/datasources/file-system.datasource";
+import { MongoLogDataSource } from "../infrastructure/datasources/mongo-log.datasource";
 import { LogRepositoryImpl } from "../infrastructure/respositories/log.repository.impl";
 import { CronService } from "./cron/cron-service";
 import { EmailService } from "./email/email.service";
 
-const fileSystemLogRepository = new LogRepositoryImpl(
-  new FileSystemDatasource()
+const LogRepository = new LogRepositoryImpl(
+  new MongoLogDataSource()
+  // new FileSystemDatasource()
 );
 const emailService = new EmailService();
 
 export class ServerApp {
-  static start() {
+  static async start() {
     console.log("Server started...");
-    console.log(envs.MONGO_PASS);
-    console.log(envs.MONGO_USER);
-    
     // new SendEmailLogs(
     //   emailService,
     //   fileSystemLogRepository
@@ -33,13 +32,16 @@ export class ServerApp {
     //   `
     // })
 
+    const logs = await LogRepository.getLogs(LogSeverityLevel.low);
+    console.log(logs);
+
     // CronService.createJob("*/5 * * * * *", () => {
-    //     // const url = "https://google.com";
-    //   const url = "https://localhost:3000";
+    //   const url = "https://google.com";
+    //   // const url = "https://localhost:3000";
     //   new CheckService(
-    //     fileSystemLogRepository,
+    //     LogRepository,
     //     undefined, // al ser métodos opcionales es nuestra elección enviar algo u omitirlo(undefined)
-    //     undefined,
+    //     undefined
     //   ).execute(url);
     // });
   }
