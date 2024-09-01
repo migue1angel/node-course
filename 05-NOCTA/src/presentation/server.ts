@@ -1,15 +1,24 @@
 import { LogSeverityLevel } from "../domain/entities/log.entity";
 import { CheckService } from "../domain/use-cases/checks/check-service";
+import { CheckServiceMultiple } from "../domain/use-cases/checks/check-service-multiple";
 import { SendEmailLogs } from "../domain/use-cases/email/send-email-logs";
 import { FileSystemDatasource } from "../infrastructure/datasources/file-system.datasource";
 import { MongoLogDataSource } from "../infrastructure/datasources/mongo-log.datasource";
+import { PostgresLogDatasource } from "../infrastructure/datasources/postgres-log.datasource";
 import { LogRepositoryImpl } from "../infrastructure/respositories/log.repository.impl";
 import { CronService } from "./cron/cron-service";
 import { EmailService } from "./email/email.service";
 
-const LogRepository = new LogRepositoryImpl(
+const FileSystemLogRepository = new LogRepositoryImpl(
+  new FileSystemDatasource()
+
+);
+const MongoLogRepository = new LogRepositoryImpl(
   new MongoLogDataSource()
-  // new FileSystemDatasource()
+);
+const PostgresLogRepository = new LogRepositoryImpl(
+  new PostgresLogDatasource()
+
 );
 const emailService = new EmailService();
 
@@ -32,14 +41,14 @@ export class ServerApp {
     //   `
     // })
 
-    const logs = await LogRepository.getLogs(LogSeverityLevel.low);
-    console.log(logs);
+    // const logs = await LogRepository.getLogs(LogSeverityLevel.low);
+    // console.log(logs);
 
     // CronService.createJob("*/5 * * * * *", () => {
-    //   const url = "https://google.com";
+    //   const url = "https://gosdfogle.com";
     //   // const url = "https://localhost:3000";
-    //   new CheckService(
-    //     LogRepository,
+    //   new CheckServiceMultiple(
+    //     [FileSystemLogRepository, PostgresLogRepository, MongoLogRepository],
     //     undefined, // al ser métodos opcionales es nuestra elección enviar algo u omitirlo(undefined)
     //     undefined
     //   ).execute(url);
