@@ -1,7 +1,7 @@
 const fs = require('fs');
 
-const data = fs.readFileSync('README.md', 'utf8');
+const content = fs.readFileSync('README.md', 'utf8');
 
-const newData = data.replace(/React/ig, 'Angular');
+const newData = content.replace(/React/ig, 'Angular');
 
-fs.writeFileSync('REDME-Angular.md', newData);
+fs.writeFileSync('README-ANGULAR.md', newData)

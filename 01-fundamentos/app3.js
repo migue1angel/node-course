@@ -1,10 +1,10 @@
-const fs = require("fs");
+const fs = require('fs');
 
-const content = fs.readFileSync("README.md", "utf8");
+const content = fs.readFileSync('README.md', 'utf8');
 
-const wordCount = content.split(" ");
+const words = content.split(" ").length;
 
-const reactWordCount = content.match(/react/gi).length;
+const reactWords = content.match(/react/ig);
 
-console.log("Palabras:", wordCount.length);
-console.log("Apariciones de react:", reactWordCount);
+console.log('Palabras: ', words);
+console.log('Apariciones de react: ', reactWords.length);
