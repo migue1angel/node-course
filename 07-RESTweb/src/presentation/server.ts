@@ -3,33 +3,35 @@ import path from "path";
 
 interface Options {
   port: number;
-  public_path?: string;
+  publicPath?: string;
 }
-
 export class Server {
+  private port: number;
+  private publicPath: string;
   private app = express();
-  private readonly port: number;
-  private readonly public_path: string;
 
   constructor(options: Options) {
-    const { port, public_path = 'public' } = options;
+    const { port, publicPath = "public" } = options;
     this.port = port;
-    this.public_path = public_path;
+    this.publicPath = publicPath;
   }
+  start() {
 
-  async start() {
     // middlewares
 
     // public folder
     this.app.use(express.static("src/public"));
 
     this.app.get("*", (req, res) => {
-      const indexPath = path.join(__dirname + `../../${this.public_path}/index.html`);
-
+      const indexPath = path.join(
+        __dirname,
+        `../${this.publicPath}/index.html`
+      );
       res.sendFile(indexPath);
     });
+
     this.app.listen(this.port, () => {
-      console.log(`server on port ${this.port}`);
+      console.log(`server running on port ${this.port}`);
     });
   }
 }
