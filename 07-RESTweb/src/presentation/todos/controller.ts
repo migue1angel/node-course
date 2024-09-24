@@ -2,66 +2,58 @@ import { Request, Response } from "express";
 import { prisma } from "../../data/postgres";
 import { CreateTodoDto } from "../../domain/dtos";
 import { UpdateTodoDto } from "../../domain/dtos/todo/update-todo.dto";
+import {
+  CreateTodo,
+  DeleteTodo,
+  FindTodo,
+  FindTodos,
+  TodoRepository,
+  UpdateTodo,
+} from "../../domain";
 
 export class TodosController {
-  constructor() {}
+  constructor(private readonly todoRepoitory: TodoRepository) {}
 
-  getTodos = async (req: Request, res: Response) => {
-    const todos = await prisma.todo.findMany();
-
-    return res.json(todos);
+  getTodos = (req: Request, res: Response) => {
+    new FindTodos(this.todoRepoitory)
+      .execute()
+      .then((todos) => res.json(todos))
+      .catch((error) => res.status(400).json({ error }));
   };
 
-  getTodoById = async (req: Request, res: Response) => {
+  getTodoById = (req: Request, res: Response) => {
     const id = +req.params.id;
-    if (isNaN(id))
-      return res.status(400).json({ error: " Id argument is not a number" });
-    const todo = await prisma.todo.findUnique({
-      where: { id },
-    });
-    todo
-      ? res.json(todo)
-      : res.status(404).json({ error: `TODO with ${id} not found` });
+    new FindTodo(this.todoRepoitory)
+      .execute(id)
+      .then((todo) => res.json(todo))
+      .catch((error) => res.status(400).json({ error }));
   };
 
-  createTodo = async (req: Request, res: Response) => {
+  createTodo = (req: Request, res: Response) => {
     const [error, createTodoDto] = CreateTodoDto.create(req.body);
     if (error) return res.status(404).json({ error });
-    const todo = await prisma.todo.create({
-      data: createTodoDto!,
-    });
-    return res.json(todo);
+    new CreateTodo(this.todoRepoitory)
+      .execute(createTodoDto!)
+      .then((todo) => res.json(todo))
+      .catch((error) => res.status(400).json({ error }));
   };
 
-  updateTodo = async (req: Request, res: Response) => {
+  updateTodo = (req: Request, res: Response) => {
     const id = +req.params.id;
-    const [error, updateTodoDto] = UpdateTodoDto.update({...req.body,id});
-    if (error) return res.status(400).json({error})
-    const todo = await prisma.todo.findUnique({
-      where: { id },
-    });
-    if (!todo)
-      return res.status(404).json({ error: `TODO with id ${id} not found` });
+    const [error, updateTodoDto] = UpdateTodoDto.update({ ...req.body, id });
+    if (error) return res.status(400).json({ error });
 
-    const updatedTodo = await prisma.todo.update({
-      where: { id },
-      data: updateTodoDto!.values,
-    });
-
-    res.json(updatedTodo);
+    new UpdateTodo(this.todoRepoitory)
+      .execute(updateTodoDto!)
+      .then((todo) => res.json(todo))
+      .catch((error) => res.status(400).json({ error }));
   };
 
-  deleteTodo = async (req: Request, res: Response) => {
+  deleteTodo = (req: Request, res: Response) => {
     const id = +req.params.id;
-    const todo = await prisma.todo.findUnique({
-      where: { id },
-    });
-    if (!todo)
-      return res.status(404).json({ error: `TODO with id ${id} not exists` });
-
-    await prisma.todo.delete({
-      where: { id },
-    });
-    res.json(`Todo with id ${id} deleted`);
+    new DeleteTodo(this.todoRepoitory)
+    .execute(id)
+    .then(todo => res.json(todo))
+    .catch(error => res.status(400).json({error}))
   };
 }
