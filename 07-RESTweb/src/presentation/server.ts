@@ -24,18 +24,26 @@ export class Server {
     this.app.use(express.urlencoded({extended: true}));
     // public folder
     this.app.use(express.static("src/public"));
+    // When you first visit the site (e.g., /),
+    // Express looks in the public directory (src/public) for files.
+    // If there's an index.html, it serves that as the main page.
 
     // routes
     this.app.use(this.routes);
 
-    // * SPA
-    this.app.get("*", (req, res) => {
+    // * SPA Single Page Aplication
+    this.app.get("*", (req, res) => { //wild card comodin
       const indexPath = path.join(
         __dirname,
         `../${this.publicPath}/index.html`
       );
+      
       res.sendFile(indexPath);
     });
+    // If you visit any other route (e.g., /about, /profile), 
+    // and there's no matching file in the public directory, 
+    // Express hits the wildcard route (this.app.get("*")), 
+    // which serves the same index.html file.
 
     this.app.listen(this.port, () => {
       console.log(`server running on port ${this.port}`);
