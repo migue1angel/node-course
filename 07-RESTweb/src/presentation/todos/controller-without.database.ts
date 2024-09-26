@@ -56,10 +56,13 @@ export class TodosController {
 
   deleteTodo = (req: Request, res: Response) => {
     const id = +req.params.id;
-    const todo = todos.find((todo) => todo.id === id);
-    if (!todo) return res.status(404).json(`TODO with id ${id} not found`);
+    const index = todos.findIndex(todo => todo.id === id)
+    // const todo = todos.find((todo) => todo.id === id);
+    // if (!todo) return res.status(404).json(`TODO with id ${id} not found`);
+    if (index === -1) return res.status(404).json(`TODO with id ${id} not found`);
 
-    todos.splice(todos.indexOf(todo), 1);
+    // todos.splice(todos.indexOf(todo), 1);
+    todos.splice(index, 1);
     res.json(`Todo with id ${id} deleted`);
   }; 
 }

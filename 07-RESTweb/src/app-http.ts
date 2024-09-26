@@ -11,9 +11,9 @@ const server = http.createServer((req, res) => {
   }
 
   if (req.url?.endsWith(".js")) {
-    res.writeHead(200, { "Content-Type": "application/javascript" });
+    res.writeHead(200, { "Content-Type": "application/javascript" }); //establecer cabeceras para leer archivs JS
   } else if (req.url?.endsWith(".css")) {
-    res.writeHead(200, { "Content-Type": "text/css" });
+    res.writeHead(200, { "Content-Type": "text/css" });//establecer cabeceras para leer archivs CSS
   }
 
   const responseContent = fs.readFileSync(`src/public${req.url}`, "utf-8");
