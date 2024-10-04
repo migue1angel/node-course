@@ -16,6 +16,6 @@ export class RegisterUserDto {
     if (!password) return ["Missing password"];
     if (password.length < 4) return ["Password too weak"];
     
-    return [ undefined, new RegisterUserDto(password, email, name)]
+    return [ undefined, new RegisterUserDto( name,password, email)]
   }
 }
