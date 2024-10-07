@@ -1,9 +1,7 @@
 import nodemailer from "nodemailer";
 import { envs } from "../../config/plugins/envs.plugin";
-import { LogRepository } from "../../domain/repository/log.repository";
-import { LogEntity, LogSeverityLevel } from "../../domain/entities/log.entity";
 
-interface sendEmailOptions {
+interface SendEmailOptions {
   to: string | string[];
   subject: string;
   htmlBody: string;
@@ -17,9 +15,8 @@ interface Attachment {
 
 export class EmailService {
 
-  constructor(){}
 
-  private transporter = nodemailer.createTransport({
+  private readonly transporter = nodemailer.createTransport({
     // cc:['macf06200@gmail.com'],
     service: envs.MAILER_SERVICE,
     auth: {
@@ -28,7 +25,7 @@ export class EmailService {
     },
   });
   
-  async sendEmail(options: sendEmailOptions): Promise<boolean> {
+  async sendEmail(options: SendEmailOptions): Promise<boolean> {
     const { htmlBody, subject, to, attachments = [] } = options;
     try {
       const sentInformation = await this.transporter.sendMail({
