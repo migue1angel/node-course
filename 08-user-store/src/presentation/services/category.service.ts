@@ -1,5 +1,10 @@
 import { CategoryModel } from "../../data";
-import { CreateCategoryDto, CustomError, UserEntity } from "../../domain";
+import {
+  CreateCategoryDto,
+  CustomError,
+  PaginationDto,
+  UserEntity,
+} from "../../domain";
 
 export class CategoryService {
   constructor() {}
@@ -27,16 +32,33 @@ export class CategoryService {
     }
   }
 
-  async findAll() {
+  async findAll(paginationDto: PaginationDto) {
+    const { page, limit } = paginationDto;
+
     try {
-      const categories = await CategoryModel.find();
-      return categories.map((category) => {
-        return {
+      // const categories = await CategoryModel.find()
+      // .skip((page-1) * limit)
+      // .limit(limit)
+      // const total = await CategoryModel.countDocuments()
+
+      const [total, categories] = await Promise.all([
+        CategoryModel.countDocuments(),
+        CategoryModel.find()
+          .skip((page - 1) * limit)
+          .limit(limit),
+      ]);
+
+      return {
+        page,
+        limit,
+        total,
+      // se puede agregar más datos como la página siguiente o la página previa
+        categories: categories.map((category) => ({
           id: category.id,
           name: category.name,
           available: category.available,
-        };
-      });
+        })),
+      };
     } catch (error) {
       throw CustomError.internalServer("Internal Server Error");
     }
