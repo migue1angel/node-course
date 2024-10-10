@@ -12,10 +12,12 @@ export class ProductService {
     try {
       
       const product = new ProductModel(createProductDto);
+      
       await product.save();
 
       return product;
     } catch (error) {
+      
       throw CustomError.internalServer(`${error}`);
     }
   }
@@ -33,7 +35,9 @@ export class ProductService {
         ProductModel.countDocuments(),
         ProductModel.find()
           .skip((page - 1) * limit)
-          .limit(limit),
+          .limit(limit)
+          .populate('user')
+          .populate('category')
         //todo: populate
       ]);
 
