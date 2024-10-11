@@ -1,11 +1,11 @@
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 
 interface ConnectionOptions {
   mongoUrl: string;
   dbName: string;
 }
 
-export class MongoDatabse {
+export class MongoDatabase {
   static async connect(options: ConnectionOptions) {
     const { dbName, mongoUrl } = options;
 
@@ -19,5 +19,9 @@ export class MongoDatabse {
 
       throw error;
     }
+  }
+
+  static async disconnect() {
+    await mongoose.disconnect();
   }
 }
