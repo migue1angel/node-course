@@ -5,7 +5,7 @@ import { error } from "console";
 import { UploadedFile } from "express-fileupload";
 
 export class FileUploadController {
-  constructor(private readonly uploadFileService:FileUploadService) {}
+  constructor(private readonly uploadFileService: FileUploadService) {}
 
   private handleErrors(error: unknown, res: Response) {
     if (error instanceof CustomError) {
@@ -17,18 +17,23 @@ export class FileUploadController {
   }
 
   uploadFile = async (req: Request, res: Response) => {
-    const files = req.files
-    if(!req.files || Object.keys(req.files).length === 0){
-      return res.status(400).json({error:'No files were uploaded'})
-    }
+    const type = req.params.type;
 
-    const file = req.files.file as UploadedFile
-    this.uploadFileService.uploadSingle(file)
-    .then(file=> res.json(file))
-    .catch(error => this.handleErrors(error,res))
+    const file = req.body.files[0] as UploadedFile;
+
+    this.uploadFileService
+      .uploadSingle(file, `uploads/${type}`)
+      .then((file) => res.json(file))
+      .catch((error) => this.handleErrors(error, res));
   };
 
   uploadMultipleFiles = async (req: Request, res: Response) => {
-    res.json("upload multiple files");
+    const type = req.params.type;
+    const files = req.body.files as UploadedFile[];
+
+    this.uploadFileService
+      .uploadMultiple(files, `uploads/${type}`)
+      .then((file) => res.json(file))
+      .catch((error) => this.handleErrors(error, res));
   };
 }

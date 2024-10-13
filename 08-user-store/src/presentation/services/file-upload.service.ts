@@ -36,9 +36,15 @@ export class FileUploadService {
     }
   }
 
-  uploadMultiple(
-    file: any[],
+  async uploadMultiple(
+    files: UploadedFile[],
     folder: string = "uploads",
     validExtensions: string[] = ["png", "jpg", "jpeg", "pdf"]
-  ) {}
+  ) {
+    const fileNames = await Promise.all(
+      files.map((file) => this.uploadSingle(file, folder, validExtensions))
+    );
+
+    return fileNames;
+  }
 }
