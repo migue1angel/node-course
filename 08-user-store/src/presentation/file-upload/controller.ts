@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { CustomError } from "../../domain";
 import { FileUploadService } from "../services/file-upload.service";
-import { error } from "console";
 import { UploadedFile } from "express-fileupload";
 
 export class FileUploadController {
@@ -16,6 +15,7 @@ export class FileUploadController {
     return res.status(500).json({ error: "Internal server error" });
   }
 
+
   uploadFile = async (req: Request, res: Response) => {
     const type = req.params.type;
 
@@ -27,6 +27,7 @@ export class FileUploadController {
       .catch((error) => this.handleErrors(error, res));
   };
 
+  
   uploadMultipleFiles = async (req: Request, res: Response) => {
     const type = req.params.type;
     const files = req.body.files as UploadedFile[];
