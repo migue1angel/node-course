@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>WebSocket- <small></small></h1>
+    <form>
+      <input type="text" placeholder="Enviar mensaje" />
+      <button>Enviar</button>
+    </form>
+
+    <ul id="messages"></ul>
+
+    <script>
+      let socket = null;
+      const form = document.querySelector("form");
+      const input = document.querySelector("input");
+      const messagesElement = document.querySelector("#messages");
+      const statusElement = document.querySelector("small");
+
+      function sendMessage(message) {
+        if (message.length <= 0) return;
+        socket?.send(message);
+      }
+
+      function renderMessage(message) {
+        const li = document.createElement("li");
+        li.innerHTML = message;
+        messagesElement.append(li);
+      }
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const message = input.value;
+        sendMessage(message);
+      });
+
+      function connectToServer() {
+        socket = new WebSocket("ws://localhost:3000");
+
+        socket.onopen = (event) => {
+          statusElement.innerHTML = "Online";
+        };
+
+        socket.onclose = (event) => {
+          statusElement.innerHTML = "Offline";
+          console.log("Disconnected");
+          setTimeout(() => {
+            connectToServer();
+          }, 1500); //** multiplicar por número aleatorio
+          // cuando se implementa algún tipo de falla y se intenta volver a conectar
+          // es recomendable multiplicar el tiempo por un número aleatorio
+          // con el fin de evitar que todas las peticiones de reconexión lleguen al mismo momento al servidor
+        };
+
+        socket.onmessage = (event) => {
+          const { payload } = JSON.parse(event.data);
+          renderMessage(payload);
+        };
+      }
+
+      connectToServer();
+    </script>
+  </body>
+</html>
